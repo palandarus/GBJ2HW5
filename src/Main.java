@@ -4,11 +4,14 @@ import java.util.Arrays;
 public class Main {
     static final int SIZE = 10000000;
     static final int HALF = SIZE / 2;
+    public static float[] ar1=new float[SIZE];
 
+    public static float[] ar2 = new float[SIZE];
 
     public static void main(String[] args) throws InterruptedException {
         method1();
         method2();
+        System.out.println(Arrays.equals(ar1,ar2));
 
     }
 
@@ -17,9 +20,10 @@ public class Main {
         int arSize=SIZE;
         float[] array = createArray(arSize);
         long a = System.currentTimeMillis();
-        calculate(array);
+        calculate(array,0);
         long b = System.currentTimeMillis();
         System.out.println("Method 1 completed, time = "+(b-a));
+        ar1=array;
     }
 
     public static float[] createArray(int size) {
@@ -30,9 +34,9 @@ public class Main {
         return array;
     }
 
-    public static float[] calculate(float[] array) {
+    public static float[] calculate(float[] array, int l) {
         for (int i = 0; i < array.length; i++) {
-            array[i] = (float)(array[i] * Math.sin(0.2f + i / 5) * Math.cos(0.2f + i / 5) * Math.cos(0.4f + i / 2));
+            array[i] = (float)(array[i] * Math.sin(0.2f + (i+l) / 5) * Math.cos(0.2f + (i+l) / 5) * Math.cos(0.4f + (i+l) / 2));
         }
         return array;
     }
@@ -47,7 +51,7 @@ public class Main {
         Thread thread1=new Thread(new Runnable() {
             @Override
             public void run() {
-                calculate(half1);
+                calculate(half1,0);
 
             }
         });
@@ -55,7 +59,7 @@ public class Main {
             @Override
             public void run() {
 
-                calculate(half2);
+                calculate(half2,HALF);
 
             }
         });
@@ -69,7 +73,7 @@ public class Main {
         System.arraycopy(half2, 0, array, HALF, HALF);
         long b=System.currentTimeMillis();
         System.out.println("Method 2 completed, time = "+(b-a));
-
+        ar2=array;
 
     }
 
